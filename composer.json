@@ -1,0 +1,16 @@
+{
+    "name": "polashmahmud/inertia-toast",
+    "description": "Simple InertiaJS + Vue + Laravel toast notification system using vue-sonner.",
+    "autoload": {
+        "psr-4": {
+            "Polashmahmud\\InertiaToast\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Polash Mahmud",
+            "email": "polashmahmud@gmail.com"
+        }
+    ],
+    "require": {}
+}
