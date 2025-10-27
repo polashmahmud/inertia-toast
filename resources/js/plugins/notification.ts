@@ -5,32 +5,32 @@ import { router, usePage } from '@inertiajs/vue3';
 
 export default {
     install(_app: any) { // eslint-disable-line @typescript-eslint/no-unused-vars
-        // Toaster auto-mount
-        if (!document.getElementById('inertia-toast-container')) {
-            const el = document.createElement('div');
-            el.id = 'inertia-toast-container';
+        /**
+         *  Fetch toast config safely
+         */
+        const inertiaPage = (window as any)?.Inertia?.page;
+        const config = inertiaPage?.props?.toastConfig || {};
+
+        /**
+         *  Mount Toaster dynamically (once)
+         */
+        if (!document.getElementById("inertia-toast-container")) {
+            const el = document.createElement("div");
+            el.id = "inertia-toast-container";
             document.body.appendChild(el);
-
-            // Get config dynamically on mount
-            const getConfig = () => {
-                const page = usePage();
-                return page?.props?.toastConfig || {};
-            };
-
-            const initialConfig = getConfig();
-            console.log('Toast Config:', initialConfig);
 
             createApp({
                 render: () =>
                     h(Toaster, {
-                        position: initialConfig.position || 'bottom-right',
-                        closeButton: initialConfig.closeButton ?? true,
-                        closeButtonPosition: initialConfig.closeButtonPosition || 'top-right',
-                        expand: initialConfig.expand ?? false,
-                        theme: initialConfig.theme || 'system',
-                        richColors: initialConfig.richColors ?? true,
+                        position: config.position || "top-right",
+                        closeButton: config.closeButton ?? true,
+                        closeButtonPosition:
+                            config.closeButtonPosition || "top-right",
+                        expand: config.expand ?? false,
+                        theme: config.theme || "system",
+                        richColors: config.richColors ?? true,
                     }),
-            }).mount('#inertia-toast-container');
+            }).mount("#inertia-toast-container");
         }
 
         /**
