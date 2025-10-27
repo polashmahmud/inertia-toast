@@ -1,8 +1,29 @@
-import { router, usePage } from "@inertiajs/vue3";
-import { toast } from "vue-sonner";
+import { createApp, h } from 'vue';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'vue-sonner';
+import { router, usePage } from '@inertiajs/vue3';
 
 export default {
-    install() {
+    install(_app: any) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        /**
+         * Mount global <Toaster /> once
+         */
+        if (!document.getElementById('inertia-toast-container')) {
+            const toasterContainer = document.createElement('div');
+            toasterContainer.id = 'inertia-toast-container';
+            document.body.appendChild(toasterContainer);
+
+            // Dynamically mount Toaster component globally
+            const toasterApp = createApp({
+                render: () => h(Toaster),
+            });
+
+            toasterApp.mount('#inertia-toast-container');
+        }
+
+        /**
+         * Listen for Inertia finish events
+         */
         router.on('finish', () => {
             const notification = usePage().props.notification as {
                 type?: string;
