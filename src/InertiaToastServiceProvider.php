@@ -26,7 +26,7 @@ class InertiaToastServiceProvider extends ServiceProvider
             __DIR__.'/../config/inertia-toast.php' => config_path('inertia-toast.php'),
         ], 'inertia-toast-config');
 
-        // Merge default config (so user override করতে পারে)
+        // Merge default config with user's config
         $this->mergeConfigFrom(__DIR__.'/../config/inertia-toast.php', 'inertia-toast');
 
         // Share config with Inertia props

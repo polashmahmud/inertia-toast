@@ -5,6 +5,7 @@ import { router, usePage } from '@inertiajs/vue3';
 
 export default {
     install(_app: any) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        // Get toast config from Inertia page props
         const page = usePage();
         const config = page?.props?.toastConfig || {};
 
