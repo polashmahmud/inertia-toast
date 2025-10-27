@@ -2,14 +2,19 @@
 
 namespace PolashMahmud\InertiaToast\Middleware;
 
-use Inertia\Middleware;
+use Closure;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class HandleInertiaToast extends Middleware
+class HandleInertiaToast
 {
-    public function share($request)
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next)
     {
-        return array_merge(parent::share($request), [
-            'notification' => [
+        Inertia::share('notification', function () {
+            return [
                 'type' => session('success') ? 'success' :
                          (session('error') ? 'error' :
                          (session('warning') ? 'warning' :
@@ -18,7 +23,9 @@ class HandleInertiaToast extends Middleware
                     ?? session('error')
                     ?? session('warning')
                     ?? session('info'),
-            ],
-        ]);
+            ];
+        });
+
+        return $next($request);
     }
 }

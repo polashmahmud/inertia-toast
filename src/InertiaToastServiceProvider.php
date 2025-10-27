@@ -3,6 +3,7 @@
 namespace PolashMahmud\InertiaToast;
 
 use Illuminate\Support\ServiceProvider;
+use PolashMahmud\InertiaToast\Middleware\HandleInertiaToast;
 
 class InertiaToastServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,7 @@ class InertiaToastServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Middleware will handle sharing notification data
+        // Register the middleware
+        $this->app['router']->pushMiddlewareToGroup('web', HandleInertiaToast::class);
     }
 }
