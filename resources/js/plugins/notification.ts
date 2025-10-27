@@ -5,20 +5,26 @@ import { router, usePage } from '@inertiajs/vue3';
 
 export default {
     install(_app: any) { // eslint-disable-line @typescript-eslint/no-unused-vars
-        /**
-         * Mount global <Toaster /> once
-         */
+        const page = usePage();
+        const config = page?.props?.toastConfig || {};
+
+        // Toaster auto-mount
         if (!document.getElementById('inertia-toast-container')) {
-            const toasterContainer = document.createElement('div');
-            toasterContainer.id = 'inertia-toast-container';
-            document.body.appendChild(toasterContainer);
+            const el = document.createElement('div');
+            el.id = 'inertia-toast-container';
+            document.body.appendChild(el);
 
-            // Dynamically mount Toaster component globally
-            const toasterApp = createApp({
-                render: () => h(Toaster),
-            });
-
-            toasterApp.mount('#inertia-toast-container');
+            createApp({
+                render: () =>
+                    h(Toaster, {
+                        position: config.position || 'top-right',
+                        closeButton: config.closeButton ?? true,
+                        closeButtonPosition: config.closeButtonPosition || 'top-right',
+                        expand: config.expand ?? false,
+                        theme: config.theme || 'system',
+                        richColors: config.richColors ?? true,
+                    }),
+            }).mount('#inertia-toast-container');
         }
 
         /**
