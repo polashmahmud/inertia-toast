@@ -13,7 +13,8 @@ class InertiaToastServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Merge default config with user's config
+        $this->mergeConfigFrom(__DIR__.'/../config/inertia-toast.php', 'inertia-toast');
     }
 
     /**
@@ -26,10 +27,10 @@ class InertiaToastServiceProvider extends ServiceProvider
             __DIR__.'/../config/inertia-toast.php' => config_path('inertia-toast.php'),
         ], 'inertia-toast-config');
 
-        $this->mergeConfigFrom(__DIR__.'/../config/inertia-toast.php', 'inertia-toast');
-
-        // Share the config with Inertia
-        Inertia::share('toastConfig', fn () => config('inertia-toast'));
+        // Share the config with Inertia (closure ensures fresh config per request)
+        Inertia::share('toastConfig', function () {
+            return config('inertia-toast', []);
+        });
 
         // Register the middleware
         $this->app['router']->pushMiddlewareToGroup('web', HandleInertiaToast::class);
