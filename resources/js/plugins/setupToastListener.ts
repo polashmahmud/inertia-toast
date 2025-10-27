@@ -7,7 +7,7 @@ import { toast } from 'vue-sonner';
 export function setupToastListener() {
     router.on('finish', () => {
         const notification = usePage().props.notification as {
-            type?: string;
+            type?: keyof typeof toast;
             body?: string;
             description?: string;
         };
@@ -18,7 +18,10 @@ export function setupToastListener() {
                 : {};
 
             const fn = toast[notification.type] || toast;
-            fn(notification.body, options);
+            (fn as (message: string, opts?: any) => void)(
+                String(notification.body),
+                options
+            );
         }
     });
 }
