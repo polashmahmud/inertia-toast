@@ -8,13 +8,13 @@ return [
     */
 
     // Toast position
-    'position' => 'bottom-right', // top-left, top-center, bottom-right, etc.
+    'position' => 'bottom-right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
 
     // Show close button?
     'closeButton' => true,
 
     // Where to place the close button
-    'closeButtonPosition' => 'top-right',
+    'closeButtonPosition' => 'top-right', // top-left, top-right, bottom-left, bottom-right
 
     // Expand stacked toasts?
     'expand' => false,
