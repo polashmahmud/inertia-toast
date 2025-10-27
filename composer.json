@@ -12,5 +12,12 @@
             "email": "polashmahmud@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Polashmahmud\\InertiaToast\\InertiaToastServiceProvider"
+            ]
+        }
+    }
 }

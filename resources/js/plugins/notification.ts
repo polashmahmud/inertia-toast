@@ -7,6 +7,8 @@ export default {
         router.on('finish', () => {
             const notification = usePage().props.notification as { type?: string; body?: string };
 
+            console.log('Notification:', notification);
+
             if (notification?.body && notification?.type) {
                 switch (notification.type) {
                     case 'success': toast.success(notification.body); break;
