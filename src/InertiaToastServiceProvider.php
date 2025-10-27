@@ -29,8 +29,10 @@ class InertiaToastServiceProvider extends ServiceProvider
         // Merge default config with user's config
         $this->mergeConfigFrom(__DIR__.'/../config/inertia-toast.php', 'inertia-toast');
 
-        // Share config with Inertia props
-        Inertia::share('toastConfig', config('inertia-toast'));
+        // Share config with Inertia props - use a callback to get fresh config on each request
+        Inertia::share('toastConfig', function () {
+            return config('inertia-toast');
+        });
 
         // Register the middleware
         $this->app['router']->pushMiddlewareToGroup('web', HandleInertiaToast::class);

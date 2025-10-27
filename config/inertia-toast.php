@@ -8,7 +8,7 @@ return [
     */
 
     // Toast position
-    'position' => 'top-right', // top-left, top-center, bottom-right, etc.
+    'position' => 'bottom-right', // top-left, top-center, bottom-right, etc.
 
     // Show close button?
     'closeButton' => true,
