@@ -15,7 +15,7 @@ It ships with:
 1. Install the package
 
 ```bash
-composer require polashmahmud/inertia-toast
+composer require polashmahmud/inertia-toast:^2.0
 ```
 
 2. Install the client dependency
@@ -24,18 +24,7 @@ composer require polashmahmud/inertia-toast
 npm install vue-sonner
 ```
 
-3. Register the service provider (if not auto-discovered)
-
-Add to `bootstrap/providers.php`:
-
-```php
-return [
-        // ... other providers
-        PolashMahmud\InertiaToast\InertiaToastServiceProvider::class,
-];
-```
-
-4. Add the plugin in your Vue app (auto-mounts Toaster)
+3. Add the plugin in your Vue app (auto-mounts Toaster)
 
 `resources/js/app.ts`
 
@@ -56,7 +45,7 @@ createInertiaApp({
 
 You do NOT need to render <Toaster /> yourself—the plugin does it for you.
 
-5. Vite alias (local dev vs. installed via Composer)
+4. Vite alias (local dev vs. installed via Composer)
 
 `vite.config.ts`
 
@@ -66,16 +55,10 @@ import path from 'path';
 export default defineConfig({
     resolve: {
         alias: {
-            // Local development (monorepo):
             '@inertia-toast': path.resolve(
                 __dirname,
-                'packages/PolashMahmud/InertiaToast/resources/js',
+                'vendor/polashmahmud/inertia-toast/resources/js',
             ),
-            // If using vendor install, you can alternatively point to:
-            // '@inertia-toast': path.resolve(
-            //   __dirname,
-            //   'vendor/polashmahmud/inertia-toast/resources/js'
-            // ),
         },
     },
 });
@@ -95,7 +78,7 @@ Optionally, add a TypeScript path mapping for better editor DX in `tsconfig.json
 }
 ```
 
-6. (Optional) Publish the config
+5. (Optional) Publish the config
 
 ```bash
 php artisan vendor:publish --tag="inertia-toast-config"
@@ -144,45 +127,12 @@ Supported types: `success`, `error`, `warning`, `info`.
 
 ---
 
-## How it works
-
-- A service provider shares `toastConfig` on every Inertia response from `config('inertia-toast')`.
-- A middleware inspects the session for the first available flash among `success|error|warning|info` and shares a `notification` prop.
-- The Vue plugin mounts vue-sonner’s `<Toaster />` once and:
-    - Applies initial config from Inertia props
-    - Listens to each navigation and updates config if it changed
-    - Displays a toast based on the `notification` prop
-
-No edits needed in your `HandleInertiaRequests` middleware.
-
----
-
 ## Troubleshooting
 
 - Changed config but UI didn’t update?
     - Run: `php artisan optimize:clear`
     - Hard refresh the browser (Disable cache in DevTools)
     - Ensure the provider is registered and alias resolves
-- Using a monorepo? Ensure the Vite alias points to the package’s `resources/js` folder.
-- TypeScript can’t resolve the alias? Add the `paths` mapping shown above and restart TS server/VS Code.
-
----
-
-## API Reference
-
-Flash payloads (server):
-
-- String: `'success' => 'Message'`
-- Tuple: `'warning' => ['Message', 'Description']`
-- Object: `'error' => ['message' => 'Message', 'description' => 'Description']`
-
-Client config (from `config/inertia-toast.php`):
-
-- `position`: one of `top-left | top-center | top-right | bottom-left | bottom-center | bottom-right`
-- `closeButton`: boolean
-- `expand`: boolean
-- `theme`: `light | dark | system`
-- `richColors`: boolean
 
 ---
 
