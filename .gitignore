@@ -1,1 +1,66 @@
-/vendor
+# ============================================
+# 🧩 Laravel + Vue + Vite Package .gitignore
+# ============================================
+
+# --- Composer ---
+/vendor/
+composer.lock
+
+# --- Node / JS / Vite ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vite/
+dist/.vite/
+*.tsbuildinfo
+*.log
+
+# ⚠️ NOTE: Keep built dist folder for NPM/Vendor
+# So we whitelist it explicitly
+!/dist/
+!/dist/**
+
+# --- Environment files ---
+.env
+.env.*.local
+
+# --- IDE / OS files ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- System / Temp ---
+*.bak
+*.tmp
+*.temp
+*~
+# Backup files from editors
+*.orig
+
+# --- Cache ---
+/storage/framework/cache/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*
+/public/storage
+
+# --- Coverage / Test artifacts ---
+coverage/
+.phpunit.result.cache
+.phpunit.cache
+tests/_output/
+tests/_support/_generated/
+
+# --- Build Tools output ---
+/public/hot
+/public/mix-manifest.json
+/.eslintcache
+/.stylelintcache
+
+# --- Misc ---
+# Ignore example/demo files if you create demo Laravel app inside package
+/example/

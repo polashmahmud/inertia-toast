@@ -1,0 +1,31 @@
+{
+  "name": "@inertia-toast/plugins",
+  "version": "1.0.0",
+  "description": "Vue plugin for Laravel Inertia Toast package.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./plugins": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "vue": "^3.3",
+    "@inertiajs/vue3": "^1.0",
+    "vue-sonner": "^1.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ]
+}
