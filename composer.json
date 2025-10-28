@@ -1,6 +1,9 @@
 {
     "name": "polashmahmud/inertia-toast",
     "description": "Simple InertiaJS + Vue + Laravel toast notification system using vue-sonner.",
+    "keywords": ["laravel", "vue", "inertia", "toast", "vue-sonner", "notification"],
+    "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Polashmahmud\\InertiaToast\\": "src/"
@@ -19,5 +22,7 @@
                 "Polashmahmud\\InertiaToast\\InertiaToastServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
