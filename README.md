@@ -1,38 +1,50 @@
 # Inertia Toast
 
-Simple InertiaJS + Vue + Laravel toast notification system using vue-sonner.
+Simple, zero-boilerplate toast notifications for Laravel + Inertia.js (Vue) using vue-sonner.
+
+It ships with:
+
+- Laravel middleware that exposes flash messages to Inertia
+- A tiny Vue plugin that auto-mounts the Toaster and listens to Inertia navigations
+- A publishable config to customize position, theme, and behavior
+
+---
 
 ## Installation
 
-1. Install the package via composer:
+1. Install the package
 
 ```bash
 composer require polashmahmud/inertia-toast
 ```
 
-2. Install vue-sonner:
+2. Install the client dependency
 
 ```bash
 npm install vue-sonner
 ```
 
-3. Register the service provider in `bootstrap/providers.php`:
+3. Register the service provider (if not auto-discovered)
+
+Add to `bootstrap/providers.php`:
 
 ```php
 return [
-    // ... other providers
-    PolashMahmud\InertiaToast\InertiaToastServiceProvider::class,
+        // ... other providers
+        PolashMahmud\InertiaToast\InertiaToastServiceProvider::class,
 ];
 ```
 
-4. Add the notification plugin to your Vue app in `resources/js/app.ts`:
+4. Add the plugin in your Vue app (auto-mounts Toaster)
 
-```typescript
-import notification from '@inertia-toast/plugins/notification';
+`resources/js/app.ts`
+
+```ts
 import 'vue-sonner/style.css';
+import notification from '@inertia-toast/plugins';
 
 createInertiaApp({
-    // ... other config
+    // ...
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
@@ -42,66 +54,137 @@ createInertiaApp({
 });
 ```
 
-5. Add the Toaster component to your main layout:
+You do NOT need to render <Toaster /> yourself—the plugin does it for you.
 
-```vue
-<script setup lang="ts">
-import { Toaster } from 'vue-sonner';
-</script>
+5. Vite alias (local dev vs. installed via Composer)
 
-<template>
-    <div>
-        <!-- Your layout content -->
-        <Toaster />
-    </div>
-</template>
-```
+`vite.config.ts`
 
-6. Update your `vite.config.ts` to add the alias:
+```ts
+import path from 'path';
 
-```typescript
 export default defineConfig({
     resolve: {
         alias: {
+            // Local development (monorepo):
             '@inertia-toast': path.resolve(
                 __dirname,
                 'packages/PolashMahmud/InertiaToast/resources/js',
             ),
+            // If using vendor install, you can alternatively point to:
+            // '@inertia-toast': path.resolve(
+            //   __dirname,
+            //   'vendor/polashmahmud/inertia-toast/resources/js'
+            // ),
         },
     },
 });
 ```
 
-## Usage
+Optionally, add a TypeScript path mapping for better editor DX in `tsconfig.json`:
 
-In your controller or route, flash messages to the session:
-
-```php
-// Success message
-return redirect()->back()->with('success', 'Operation completed successfully!');
-
-// Error message
-return redirect()->back()->with('error', 'Something went wrong!');
-
-// Warning message
-return redirect()->back()->with('warning', 'Please be careful!');
-
-// Info message
-return redirect()->back()->with('info', 'Here is some information.');
+```jsonc
+{
+    "compilerOptions": {
+        "paths": {
+            "@inertia-toast/*": [
+                "./packages/PolashMahmud/InertiaToast/resources/js/*",
+            ],
+        },
+    },
+}
 ```
 
-The toast notifications will appear automatically after the page transition!
+6. (Optional) Publish the config
+
+```bash
+php artisan vendor:publish --tag="inertia-toast-config"
+```
+
+This creates `config/inertia-toast.php` where you can tweak:
+
+```php
+return [
+        'position' => 'bottom-right', // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+        'closeButton' => true,
+        'expand' => false,
+        'theme' => 'system',          // light | dark | system
+        'richColors' => true,
+];
+```
+
+---
+
+## Usage
+
+From your controller or route, flash to the session. The plugin automatically shows a toast after the Inertia visit finishes.
+
+Minimal (string body):
+
+```php
+return back()->with('success', 'That worked nicely');
+```
+
+With description (indexed array):
+
+```php
+return back()->with('warning', ['That worked nicely', 'Please check again']);
+```
+
+With description (associative array):
+
+```php
+return back()->with('error', [
+        'message' => 'Something went wrong!',
+        'description' => 'Please try again after 5 seconds.',
+]);
+```
+
+Supported types: `success`, `error`, `warning`, `info`.
+
+---
 
 ## How it works
 
-The package automatically:
+- A service provider shares `toastConfig` on every Inertia response from `config('inertia-toast')`.
+- A middleware inspects the session for the first available flash among `success|error|warning|info` and shares a `notification` prop.
+- The Vue plugin mounts vue-sonner’s `<Toaster />` once and:
+    - Applies initial config from Inertia props
+    - Listens to each navigation and updates config if it changed
+    - Displays a toast based on the `notification` prop
 
-- Registers a middleware that shares notification data from session to Inertia
-- Listens to Inertia navigation events
-- Shows toast notifications based on session flash messages
-- Clears the notifications after displaying
+No edits needed in your `HandleInertiaRequests` middleware.
 
-No additional configuration needed in your HandleInertiaRequests middleware!
+---
+
+## Troubleshooting
+
+- Changed config but UI didn’t update?
+    - Run: `php artisan optimize:clear`
+    - Hard refresh the browser (Disable cache in DevTools)
+    - Ensure the provider is registered and alias resolves
+- Using a monorepo? Ensure the Vite alias points to the package’s `resources/js` folder.
+- TypeScript can’t resolve the alias? Add the `paths` mapping shown above and restart TS server/VS Code.
+
+---
+
+## API Reference
+
+Flash payloads (server):
+
+- String: `'success' => 'Message'`
+- Tuple: `'warning' => ['Message', 'Description']`
+- Object: `'error' => ['message' => 'Message', 'description' => 'Description']`
+
+Client config (from `config/inertia-toast.php`):
+
+- `position`: one of `top-left | top-center | top-right | bottom-left | bottom-center | bottom-right`
+- `closeButton`: boolean
+- `expand`: boolean
+- `theme`: `light | dark | system`
+- `richColors`: boolean
+
+---
 
 ## License
 
