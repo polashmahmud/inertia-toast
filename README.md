@@ -43,9 +43,9 @@ createInertiaApp({
 });
 ```
 
-You do NOT need to render <Toaster /> yourself—the plugin does it for you.
+You do NOT need to render `<Toaster />` yourself—the plugin does it for you.
 
-4. Vite alias (local dev vs. installed via Composer)
+4. Vite alias
 
 `vite.config.ts`
 
@@ -78,7 +78,7 @@ Optionally, add a TypeScript path mapping for better editor DX in `tsconfig.json
 }
 ```
 
-5. (Optional) Publish the config
+5. Publish the config
 
 ```bash
 php artisan vendor:publish --tag="inertia-toast-config"
