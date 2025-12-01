@@ -15,7 +15,7 @@ It ships with:
 1. Install the package
 
 ```bash
-composer require polashmahmud/inertia-toast:^2.0
+composer require polashmahmud/inertia-toast:^2.0.1
 ```
 
 2. Install the client dependency
