@@ -29,17 +29,17 @@ npm install vue-sonner
 `resources/js/app.ts`
 
 ```ts
-import 'vue-sonner/style.css';
-import notification from '@inertia-toast/plugins';
+import "vue-sonner/style.css";
+import notification from "@inertia-toast/plugins";
 
 createInertiaApp({
-    // ...
-    setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(notification)
-            .mount(el);
-    },
+  // ...
+  setup({ el, App, props, plugin }) {
+    createApp({ render: () => h(App, props) })
+      .use(plugin)
+      .use(notification)
+      .mount(el);
+  },
 });
 ```
 
@@ -50,17 +50,17 @@ You do NOT need to render `<Toaster />` yourself—the plugin does it for you.
 `vite.config.ts`
 
 ```ts
-import path from 'path';
+import path from "path";
 
 export default defineConfig({
-    resolve: {
-        alias: {
-            '@inertia-toast': path.resolve(
-                __dirname,
-                'vendor/polashmahmud/inertia-toast/resources/js',
-            ),
-        },
+  resolve: {
+    alias: {
+      "@inertia-toast": path.resolve(
+        __dirname,
+        "vendor/polashmahmud/inertia-toast/resources/js"
+      ),
     },
+  },
 });
 ```
 
@@ -68,13 +68,11 @@ Optionally, add a TypeScript path mapping for better editor DX in `tsconfig.json
 
 ```jsonc
 {
-    "compilerOptions": {
-        "paths": {
-            "@inertia-toast/*": [
-                "./packages/PolashMahmud/InertiaToast/resources/js/*",
-            ],
-        },
-    },
+  "compilerOptions": {
+    "paths": {
+      "@inertia-toast/*": ["./vendor/polashmahmud/inertia-toast/resources/js/*"]
+    }
+  }
 }
 ```
 
@@ -88,11 +86,16 @@ This creates `config/inertia-toast.php` where you can tweak:
 
 ```php
 return [
-        'position' => 'bottom-right', // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
-        'closeButton' => true,
-        'expand' => false,
-        'theme' => 'system',          // light | dark | system
-        'richColors' => true,
+    'position' => 'bottom-right', // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+    'closeButton' => true,
+    'expand' => false,
+    'theme' => 'system',          // light | dark | system
+    'richColors' => true,
+    'toastOptions' => [
+        'style' => [],
+        'class' => '',
+        'descriptionClass' => '',
+    ],
 ];
 ```
 
@@ -127,12 +130,44 @@ Supported types: `success`, `error`, `warning`, `info`.
 
 ---
 
+## Custom Styling
+
+You can customize the appearance of the toast notifications by modifying the `toastOptions` in `config/inertia-toast.php`.
+
+```php
+'toastOptions' => [
+    'style' => [
+        'background' => '#fda4af',
+    ],
+    'class' => 'bg-red-500 text-white',
+    'descriptionClass' => 'text-red-100',
+],
+```
+
+### Using Tailwind CSS
+
+If you want to use Tailwind CSS classes in the `class` or `descriptionClass` options, you must ensure that Tailwind scans your configuration file. Add the config file path to the `content` array in your `tailwind.config.js`:
+
+```js
+module.exports = {
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+    "./config/inertia-toast.php", // Add this line
+  ],
+  // ...
+};
+```
+
+---
+
 ## Troubleshooting
 
 - Changed config but UI didn’t update?
-    - Run: `php artisan optimize:clear`
-    - Hard refresh the browser (Disable cache in DevTools)
-    - Ensure the provider is registered and alias resolves
+  - Run: `php artisan optimize:clear`
+  - Hard refresh the browser (Disable cache in DevTools)
+  - Ensure the provider is registered and alias resolves
 
 ---
 
