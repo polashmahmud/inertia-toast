@@ -24,4 +24,19 @@ return [
 
     // Use vue-sonner rich colors
     'richColors' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Styles
+    |--------------------------------------------------------------------------
+    |
+    | Here you can define custom styles for the toast component.
+    | You can use 'style' for inline styles or 'class' for CSS classes.
+    |
+    */
+    'toastOptions' => [
+        'style' => [], // e.g. ['background' => '#fda4af']
+        'class' => '', // e.g. 'my-toast'
+        'descriptionClass' => '', // e.g. 'my-toast-description'
+    ],
 ];

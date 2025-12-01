@@ -17,6 +17,7 @@ export function createReactiveToaster(config: Record<string, any>) {
         expand: config.expand ?? false,
         theme: (config.theme as any) || 'system',
         richColors: config.richColors ?? true,
+        toastOptions: config.toastOptions || {},
     });
 
     const applyConfig = (cfg: Record<string, any> | undefined) => {
@@ -26,6 +27,7 @@ export function createReactiveToaster(config: Record<string, any>) {
         if (typeof cfg.expand === 'boolean') props.expand = cfg.expand;
         if (cfg.theme) props.theme = cfg.theme as any;
         if (typeof cfg.richColors === 'boolean') props.richColors = cfg.richColors;
+        if (cfg.toastOptions) props.toastOptions = cfg.toastOptions;
     };
 
     // Mount toaster
